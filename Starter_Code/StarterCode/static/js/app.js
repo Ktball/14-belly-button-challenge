@@ -76,36 +76,63 @@ function constructCharts(sample) {
         mode: "gauge+number+delta",
         value: washFrequency,
         title: { text: "Scrubs per Week", font: { size: 24 } },
-        delta: { reference: 400, increasing: { color: "RebeccaPurple" } },
+        delta: { reference: 400, increasing: { color: "Earthcolors" } },
         gauge: {
             axis: { range: [0,9], tickwidth: 1, tickcolor: "darkblue" },
-            bar: { colorscale: "Greens" },
+            bar: { colorscale: "Earthcolors" },
             bgcolor: "white",
             borderwidth: 2,
             bordercolor: "gray",
                 steps: [
-                  { range: [0, 1], color: "white" },
-                  { range: [1, 2], color: "ivory" },
-                  { range: [2, 3], color: "green" },
-                  { range: [3, 4], color: "lightgreen" },
-                  { range: [4, 5], color: "green" },
-                  { range: [5, 6], color: "green" },
-                  { range: [6, 7], color: "cyan" },
-                  { range: [7, 8], color: "green" },
-                  { range: [8, 9], color: "dark green" }
+                  { range: [0, 1], color: "ivory" },
+                  { range: [1, 2], color: "green" },
+                  { range: [2, 3], color: "olive" },
+                  { range: [3, 4], color: "green" },
+                  { range: [4, 5], color: "dark green" },
+                  { range: [5, 6], color: "olive" },
+                  { range: [6, 7], color: "tan" },
+                  { range: [7, 8], color: "brown" },
+                  { range: [8, 9], color: " dark brown" }
                 ],
               }
             };
 
-        wfGauge.value = washFrequency;
+    //create function to update the needle position
+    //chatgpt
+     function updateNeedle(value){
+        let angle = value * 20;
+        d3.select("#needle").transition().duration(1000).attr("transform", "rotate("+ angle +", 200, 200)");
+     }  
+
+    //update gauge chart value
+    wfGauge.value = washFrequency;
+
+    //add needle to the gauge
+    d3.select("#gauge")
+        .append("svg")
+        .attr("width", 400)
+        .attr("height", 400)
+        .append("line")
+        .attr("id", "needle")
+        .attr("x1", 200)
+        .attr("y1", 200)
+        .attr("x2", 200)
+        .attr("y2", 100)
+        .attr("stroke", "red")
+        .attr("stroke-width", 3);
+    
+         //update the needle position initially
+         updateNeedle(washFrequency);
           
         let layout = {
-            width: 500,
+            width: 400,
             height: 400,
             margin: { t: 25, r: 25, l: 25, b: 25 },
-            font: { color: "darkblue", family: "Arial" }
+            font: { color: "black", family: "Arial" }
           };
           
+      
+
           Plotly.newPlot("gauge", [wfGauge], layout);
     });
 }
